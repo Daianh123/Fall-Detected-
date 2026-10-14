@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#edf1ec" />
+    <title>Canh — Phát hiện té ngã</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body class="home-page">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Canh, trang chủ"
+        ><span class="brand-mark" aria-hidden="true"></span
+        ><span>canh<span class="brand-period">.</span></span></a
+      >
+      <span class="topbar-note">Hệ thống hỗ trợ giám sát an toàn</span>
+      <a class="topbar-link" href="/monitor"
+        >Bàn giám sát <span aria-hidden="true">↗</span></a
+      >
+    </header>
+
+    <main>
+      <section class="home-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="status-dot"></span> Thị giác máy tính · LSTM
+          </p>
+          <h1>Phát hiện té ngã.<br /><span>Phản hồi kịp thời.</span></h1>
+          <p class="hero-description">
+            Canh phân tích chuyển động từ camera để nhận biết nguy cơ té ngã, hỗ
+            trợ người chăm sóc theo dõi liên tục.
+          </p>
+          <a class="primary-button" href="/monitor"
+            >Mở bàn giám sát <span aria-hidden="true">↗</span></a
+          >
+          <p class="hero-footnote">
+            Nhận video trực tiếp qua RTSP hoặc xử lý tệp video có sẵn.
+          </p>
+        </div>
+
+        <div class="hero-visual" aria-label="Khung hình camera minh họa">
+          <div class="visual-topline">
+            <span><i class="live-indicator"></i> KHUNG HÌNH MẪU</span
+            ><span>01 / CAMERA</span>
+          </div>
+          <div class="demo-screen">
+            {% if demo_available %}
+            <img src="/demo" alt="Video mẫu" />
+            {% else %}
+            <div class="demo-empty">
+              <span class="person-glyph" aria-hidden="true"></span
+              ><span>Chưa có video mẫu</span>
+            </div>
+            {% endif %}
+            <div class="scanline" aria-hidden="true"></div>
+            <div class="visual-caption">
+              <span>PHÂN TÍCH CHUYỂN ĐỘNG</span
+              ><span class="caption-signal">● SẴN SÀNG</span>
+            </div>
+          </div>
+          <div class="visual-bottomline">
+            <span>YOLOv8 pose</span><span>→</span><span>30 khung hình</span
+            ><span>→</span><span>LSTM</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="home-ribbon" aria-label="Thông tin hệ thống">
+        <p>
+          <strong>01</strong
+          ><span>Theo dõi chuyển động theo thời gian thực</span>
+        </p>
+        <p>
+          <strong>02</strong
+          ><span>Phân tích chuỗi tư thế bằng mô hình LSTM</span>
+        </p>
+        <p><strong>03</strong><span>Hỗ trợ camera IP và video tải lên</span></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>CANH / GIÁM SÁT AN TOÀN</span
+      ><span>Hỗ trợ nhận biết, không thay thế chăm sóc trực tiếp.</span>
+    </footer>
+  </body>
+</html>

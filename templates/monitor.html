@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#edf1ec" />
+    <title>Bàn giám sát — Canh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <script src="{{ url_for('static', filename='monitor.js') }}" defer></script>
+  </head>
+  <body class="monitor-page">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Canh, trang chủ"
+        ><span class="brand-mark" aria-hidden="true"></span
+        ><span>canh<span class="brand-period">.</span></span></a
+      >
+      <span class="topbar-note">Bàn giám sát</span>
+      <a class="topbar-link" href="/"
+        >Về trang chủ <span aria-hidden="true">↗</span></a
+      >
+    </header>
+
+    <main class="monitor-main">
+      <div class="monitor-heading">
+        <div>
+          <p class="eyebrow">GIÁM SÁT CHUYỂN ĐỘNG</p>
+          <h1>Bàn giám sát</h1>
+        </div>
+        <div class="system-state">
+          <span class="status-dot" id="system-dot"></span
+          ><span id="system-state">Sẵn sàng kết nối</span>
+        </div>
+      </div>
+
+      <div class="monitor-layout">
+        <section class="feed-column" aria-label="Hình ảnh phân tích">
+          <div class="feed-toolbar">
+            <span id="feed-source">CHƯA CÓ NGUỒN VIDEO</span
+            ><span id="frame-count">0 KHUNG HÌNH</span>
+          </div>
+          <div class="feed-view" id="feed-view">
+            <img id="video-feed" alt="Hình ảnh video đã phân tích" />
+            <div class="feed-empty" id="feed-empty">
+              <span class="feed-crosshair" aria-hidden="true"><i></i></span>
+              <p>Chưa có tín hiệu video</p>
+              <span>Chọn nguồn để bắt đầu phân tích</span>
+            </div>
+            <div class="feed-live" id="feed-live" hidden>
+              <span class="live-indicator"></span> ĐANG PHÂN TÍCH
+            </div>
+          </div>
+          <div class="feed-legend">
+            <span><i class="legend-normal"></i> Bình thường</span
+            ><span><i class="legend-alert"></i> Cảnh báo té ngã</span
+            ><span>YOLOv8 pose + LSTM</span>
+          </div>
+        </section>
+
+        <aside class="control-column">
+          <div class="control-heading">
+            <h2>Nguồn video</h2>
+            <span class="step-index">01</span>
+          </div>
+          <div class="source-tabs" role="tablist" aria-label="Loại nguồn video">
+            <button
+              class="source-tab active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-source-tab="rtsp"
+            >
+              Camera RTSP
+            </button>
+            <button
+              class="source-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-source-tab="file"
+            >
+              Tệp video
+            </button>
+          </div>
+
+          <form id="source-form">
+            <div class="source-panel" data-source-panel="rtsp">
+              <label for="rtsp-source">Địa chỉ luồng</label>
+              <input
+                id="rtsp-source"
+                name="source"
+                type="url"
+                placeholder="rtsp://camera.local:554/stream"
+                autocomplete="url"
+                spellcheck="false"
+              />
+              <p class="field-hint">Ví dụ: rtsp://192.168.1.20:554/stream</p>
+            </div>
+            <div class="source-panel" data-source-panel="file" hidden>
+              <label for="video-file">Chọn tệp video</label>
+              <input
+                id="video-file"
+                name="video"
+                type="file"
+                accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/x-msvideo"
+              />
+              <p class="field-hint">
+                MP4, AVI, MOV, MKV hoặc WMV · tối đa 500 MB
+              </p>
+            </div>
+            <div class="action-row">
+              <button
+                class="primary-button start-button"
+                type="submit"
+                id="start-button"
+              >
+                <span class="button-play" aria-hidden="true">▶</span> Bắt đầu
+                phát hiện
+              </button>
+              <button
+                class="stop-button"
+                type="button"
+                id="stop-button"
+                disabled
+                title="Dừng phân tích"
+              >
+                <span aria-hidden="true">■</span
+                ><span class="sr-only">Dừng</span>
+              </button>
+            </div>
+            <p
+              class="form-message"
+              id="form-message"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+
+          <div class="result-block" aria-live="polite">
+            <div class="control-heading">
+              <h2>Kết quả hiện tại</h2>
+              <span class="step-index">02</span>
+            </div>
+            <div class="result-reading" id="result-reading">
+              <span class="result-mark neutral" id="result-mark"></span>
+              <div>
+                <p id="result-label">Chưa có dự đoán</p>
+                <span id="result-confidence">Kết quả sẽ xuất hiện tại đây</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="model-note">
+            <span class="model-note-mark" aria-hidden="true">C</span>
+            <p>
+              <strong>Mô hình đang dùng</strong><br />YOLOv8 pose trích xuất 17
+              điểm khớp; LSTM đánh giá chuỗi 30 khung hình.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>CANH / BÀN GIÁM SÁT</span
+      ><span>Luồng video được xử lý trên máy chủ đang chạy ứng dụng.</span>
+    </footer>
+  </body>
+</html>
